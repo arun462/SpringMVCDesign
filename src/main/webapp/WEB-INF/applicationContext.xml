@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"   
+    xmlns:context="http://www.springframework.org/schema/context"  
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+     xmlns:tx="http://www.springframework.org/schema/tx"
+      xmlns:aop="http://www.springframework.org/schema/aop"    
+    xsi:schemaLocation="  
+        http://www.springframework.org/schema/beans  
+        http://www.springframework.org/schema/beans/spring-beans.xsd  
+        http://www.springframework.org/schema/context  
+        http://www.springframework.org/schema/context/spring-context.xsd  
+        http://www.springframework.org/schema/mvc  
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+         http://www.springframework.org/schema/tx  
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+         http://www.springframework.org/schema/aop  
+        http://www.springframework.org/schema/aop/spring-aop.xsd">  
+  
+    
+    <mvc:annotation-driven />
+	<aop:aspectj-autoproxy />
+    <context:component-scan base-package="com.in"/>
+    
+    <mvc:resources location="/" mapping="/*"/>
+  
+  <bean id="ds"  class="org.apache.commons.dbcp.BasicDataSource">
+  <property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
+  <property name="url" value="jdbc:mysql://localhost:3306/student"></property>
+  <property name="username" value="root"></property>
+  <property name="password" value="root"></property>
+  </bean>
+  
+  <bean id="mySession" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+  <property name="dataSource" ref="ds"></property>
+  <property name="hibernateProperties">
+  <props>  
+  <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
+				<!-- <prop key="hibernate.hbm2ddl.auto">create</prop> -->
+				<prop key="hibernate.show_sql">true</prop>
+				
+   
+  </props>
+     
+  </property>
+  
+  <property name="packagesToScan">
+			<list>
+				<value>com.in.model</value>
+			</list>
+		</property>
+ 
+  </bean>
+<bean id="txManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+<property name="SessionFactory" ref="mySession"></property>
+
+</bean>  
+  
+  <tx:annotation-driven transaction-manager="txManager"/>
+  
+</beans>  
