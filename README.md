@@ -1,1 +1,1 @@
-# SpringMVCDesign
+# SpringMVCDesign Sample
